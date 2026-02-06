@@ -1,6 +1,5 @@
 {
   "name": "languages",
-  "homepage": "https://sabir-124.github.io/fluentAI",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -8,9 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^7.1.0",
@@ -22,7 +19,6 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "framer-motion": "^12.31.0",
-    "gh-pages": "^6.3.0",
     "lucide-react": "^0.563.0",
     "motion": "^12.31.0",
     "radix-ui": "^1.4.3",
