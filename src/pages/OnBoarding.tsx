@@ -4,7 +4,6 @@ import {
   Globe,
   Target,
   Zap,
-  CheckCircle,
   ArrowRight,
   ArrowLeft,
   Sparkles,
@@ -13,10 +12,9 @@ import { goals, proficiencyLevels, scenarios } from "@/data/onBoarding";
 import Header from "@/components/Boarding/Header";
 import ProgressBar from "@/components/Boarding/ProgressBar";
 import StepsTitles from "@/components/Boarding/StepsTitles";
-import IconGradientDefs from "@/component_Factory/IconGradientDefs";
-import Selector from "@/component_Factory/Selector";
+import Selector from "@/components/Boarding/Selector";
 import { usePreference } from "@/store/usePreferences";
-import Picker from "@/component_Factory/Picker";
+import Picker from "@/components/Boarding/Picker";
 
 const languages = [
   { name: "Spanish", native: "Español", flag: "🇪🇸", popular: true },
@@ -116,12 +114,12 @@ export default function OnboardingPage() {
                     .map((lang) => (
                       <>
                         <Picker
+                          currentStep={1}
                           title={lang.name}
                           subTitle={lang.native}
                           onChange={setSelectedLanguage}
                           onChangeProp={lang.name}
-                          selectedState={selectedLanguage}
-                          state={lang.name}
+                          isSelected={selectedLanguage === lang.name}
                           flag={lang.flag}
                           popular={true}
                         />
@@ -139,20 +137,17 @@ export default function OnboardingPage() {
                   {languages
                     .filter((l) => !l.popular)
                     .map((lang) => (
-                      <button
-                        key={lang.name}
-                        onClick={() => setSelectedLanguage(lang.name)}
-                        className={`p-4 rounded-xl border-2 transition-all duration-300 ${
-                          selectedLanguage === lang.name
-                            ? " border-[#00D9C0]"
-                            : "bg-[#1A1F2E] border-[rgba(255,255,255,0.1)] hover:border-[#6C47FF]"
-                        }`}
-                      >
-                        <div className="text-3xl mb-2">{lang.flag}</div>
-                        <h4 className="text-sm font-bold text-white">
-                          {lang.name}
-                        </h4>
-                      </button>
+                      <>
+                        <Picker
+                          currentStep={1}
+                          title={lang.name}
+                          subTitle={lang.native}
+                          onChange={setSelectedLanguage}
+                          onChangeProp={lang.name}
+                          isSelected={selectedLanguage === lang.name}
+                          flag={lang.flag}
+                        />
+                      </>
                     ))}
                 </div>
               </div>
@@ -209,36 +204,17 @@ export default function OnboardingPage() {
                   const isSelected = learningGoals.includes(goal.id);
                   const Icon = goal.icon;
                   return (
-                    <button
-                      key={goal.id}
-                      onClick={() => setLearningGoals(goal.id)}
-                      className={`relative p-8 rounded-2xl border-2 transition-all duration-300 flex flex-col items-center ${
-                        isSelected
-                          ? "border-[#00D9C0] scale-105"
-                          : "bg-[#1A1F2E] border-[rgba(255,255,255,0.1)] hover:border-[#6C47FF] hover:scale-105"
-                      }`}
-                    >
-                      {isSelected && (
-                        <div className="absolute top-3 right-3">
-                          <CheckCircle className="w-6 h-6 text-[#00D9C0]" />
-                        </div>
-                      )}
-                      <div className="text-5xl mb-4">
-                        <IconGradientDefs
-                          id={goal.id}
-                          from={goal.iconColor}
-                          to={goal.iconColorDark}
-                        />
-                        <Icon
-                          stroke={`url(#${goal.id})`}
-                          strokeWidth={2}
-                          className="w-13 h-13"
-                        />
-                      </div>
-                      <h3 className="text-xl font-bold text-white">
-                        {goal.label}
-                      </h3>
-                    </button>
+                    <Picker
+                      currentStep={3}
+                      title={goal.label}
+                      onChange={setLearningGoals}
+                      onChangeProp={goal.id}
+                      isSelected={isSelected}
+                      Icon={Icon}
+                      iconID={goal.id}
+                      iconGradientFrom={goal.iconColor}
+                      iconGradientTo={goal.iconColorDark}
+                    />
                   );
                 })}
               </div>
@@ -269,39 +245,18 @@ export default function OnboardingPage() {
                   const Icon = scenario.icon;
 
                   return (
-                    <button
-                      key={scenario.id}
-                      onClick={() => toggleScenario(scenario.id)}
-                      className={`relative p-6 rounded-2xl border-2 transition-all duration-300 text-left ${
-                        isSelected
-                          ? " border-[#00D9C0] scale-105"
-                          : "bg-[#1A1F2E] border-[rgba(255,255,255,0.1)] hover:border-[#6C47FF] hover:scale-105"
-                      }`}
-                    >
-                      {isSelected && (
-                        <div className="absolute top-4 right-4">
-                          <CheckCircle className="w-6 h-6 text-[#00D9C0]" />
-                        </div>
-                      )}
-                      <div className="text-4xl mb-4">
-                        <IconGradientDefs
-                          id={scenario.id}
-                          from={scenario.iconColor}
-                          to={scenario.iconColorDark}
-                        />
-                        <Icon
-                          stroke={`url(#${scenario.id})`}
-                          strokeWidth={2}
-                          className="w-13 h-13"
-                        />
-                      </div>
-                      <h3 className="text-xl font-bold text-white mb-2">
-                        {scenario.label}
-                      </h3>
-                      <p className="text-sm text-[#E8ECEF] opacity-70">
-                        {scenario.description}
-                      </p>
-                    </button>
+                    <Picker
+                      currentStep={4}
+                      title={scenario.label}
+                      subTitle={scenario.description}
+                      onChange={toggleScenario}
+                      onChangeProp={scenario.id}
+                      isSelected={isSelected}
+                      Icon={Icon}
+                      iconID={scenario.id}
+                      iconGradientFrom={scenario.iconColor}
+                      iconGradientTo={scenario.iconColorDark}
+                    />
                   );
                 })}
               </div>

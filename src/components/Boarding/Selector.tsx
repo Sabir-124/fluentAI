@@ -1,4 +1,4 @@
-import IconGradientDefs from "./IconGradientDefs";
+import IconGradientDefs from "../../component_Factory/IconGradientDefs";
 import { CheckCircle, type LucideIcon } from "lucide-react";
 
 interface SelectorProps {
