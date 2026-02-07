@@ -22,7 +22,7 @@ const Items = [
   },
 ];
 
-const Routes = ["/sign", "/onboarding", "/conversation"];
+const Routes = ["/", "/features", "/about", "/languages"];
 
 const Header = () => {
   const { currentLink } = useLinkStore();
@@ -30,7 +30,7 @@ const Header = () => {
 
   return (
     <div
-      className={`fixed left-0 right-0 top-0 z-50 h-16 md:h-20 border-b border-b-[rgba(255,255,255,0.1)] bg-[rgba(15,20,25,0.85)] backdrop-blur-[10px] shadow-[0_4px_20px_rgba(0,0,0,0.3)] justify-center lg:justify-start items-center md:px-5 px-2 ${Routes.some((path) => path === pathname) ? "hidden" : "flex"}`}
+      className={`fixed left-0 right-0 top-0 z-50 h-16 md:h-20 border-b border-b-[rgba(255,255,255,0.1)] bg-[rgba(15,20,25,0.85)] backdrop-blur-[10px] shadow-[0_4px_20px_rgba(0,0,0,0.3)] justify-center lg:justify-start items-center md:px-5 px-2 ${Routes.some((path) => path === pathname) ? "flex" : "hidden"}`}
     >
       {/* main logo */}
       <Logo />

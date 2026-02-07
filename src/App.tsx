@@ -11,6 +11,11 @@ import About from "./pages/About";
 import LearningGuidesPage from "./components/Guide/GuidePage";
 import AuthPage from "./pages/SignUp";
 import OnboardingPage from "./pages/OnBoarding";
+import Conversation from "./pages/Conversation";
+import Profile from "./pages/Profile";
+import ProgressOverview from "./pages/ProgressOverview";
+import Dashboard from "./pages/Dashboard";
+import UserHeader from "./components/Dashboard/Header";
 
 const App = () => {
   const { pathname } = useLocation();
@@ -23,6 +28,10 @@ const App = () => {
       "/languages": "Languages | FluentAI",
       "/about": "About Us | FluentAI",
       "/contact": "Contacts | FluentAI",
+      "/dashboard": "Dashboard | FluentAI",
+      "/conversation": "Conversation | FluentAI",
+      "/progress": "Progress | FluentAI",
+      "/help": "Help | FluentAI",
     };
 
     document.title =
@@ -33,11 +42,16 @@ const App = () => {
     else if (pathname === "/features") setCurrentLink("Features");
     else if (pathname === "/languages") setCurrentLink("Languages");
     else if (pathname === "/about") setCurrentLink("About");
+    else if (pathname === "/dashboard") setCurrentLink("Dashboard");
+    else if (pathname === "/conversation") setCurrentLink("Conversation");
+    else if (pathname === "/progress") setCurrentLink("Progress");
+    else if (pathname === "/help") setCurrentLink("Help");
   }, [pathname, setCurrentLink]);
 
   return (
     <div>
       <Header />
+      <UserHeader />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/features" element={<Features />} />
@@ -46,6 +60,10 @@ const App = () => {
         <Route path="/guides" element={<LearningGuidesPage />} />
         <Route path="/sign" element={<AuthPage />} />
         <Route path="/onboarding" element={<OnboardingPage />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/conversation" element={<Conversation />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/progress" element={<ProgressOverview />} />
       </Routes>
       <FooterMinimal />
     </div>
