@@ -29,27 +29,21 @@ const languages = [
 
 export default function OnboardingPage() {
   const [currentStep, setCurrentStep] = useState(1);
-  const [preferredScenarios, setPreferredScenarios] = useState<string[]>([]);
 
   const {
     selectedLanguage,
     selectedLevel,
     learningGoals,
+    prefferedScenarios,
     setSelectedLanguage,
     setSelectedLevel,
     setLearningGoals,
+    setPrefferedScenarios,
+    setSelectedScenario,
   } = usePreference();
 
   const totalSteps = 4;
   const progress = (currentStep / totalSteps) * 100;
-
-  const toggleScenario = (scenarioId: string) => {
-    if (preferredScenarios.includes(scenarioId)) {
-      setPreferredScenarios(preferredScenarios.filter((s) => s !== scenarioId));
-    } else {
-      setPreferredScenarios([...preferredScenarios, scenarioId]);
-    }
-  };
 
   const canProceed = () => {
     switch (currentStep) {
@@ -60,22 +54,14 @@ export default function OnboardingPage() {
       case 3:
         return learningGoals.length > 0;
       case 4:
-        return preferredScenarios.length >= 2;
+        return prefferedScenarios.length >= 2;
       default:
         return false;
     }
   };
 
   const handleFinish = () => {
-    // Save user preferences
-    const preferences = {
-      language: selectedLanguage,
-      level: selectedLevel,
-      goals: learningGoals,
-      scenarios: preferredScenarios,
-    };
-    console.log("User preferences:", preferences);
-
+    setSelectedScenario(prefferedScenarios[0]);
     // Redirect to conversation page
     window.location.href = "/conversation";
   };
@@ -241,7 +227,7 @@ export default function OnboardingPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
                 {scenarios.map((scenario) => {
-                  const isSelected = preferredScenarios.includes(scenario.id);
+                  const isSelected = prefferedScenarios.includes(scenario.id);
                   const Icon = scenario.icon;
 
                   return (
@@ -249,7 +235,7 @@ export default function OnboardingPage() {
                       currentStep={4}
                       title={scenario.label}
                       subTitle={scenario.description}
-                      onChange={toggleScenario}
+                      onChange={setPrefferedScenarios}
                       onChangeProp={scenario.id}
                       isSelected={isSelected}
                       Icon={Icon}
@@ -263,9 +249,9 @@ export default function OnboardingPage() {
 
               <div className="mt-8 text-center">
                 <p className="text-sm text-[#E8ECEF] opacity-50">
-                  Selected: {preferredScenarios.length}{" "}
-                  {preferredScenarios.length === 1 ? "scenario" : "scenarios"}
-                  {preferredScenarios.length < 2 && " (select at least 2)"}
+                  Selected: {prefferedScenarios.length}{" "}
+                  {prefferedScenarios.length === 1 ? "scenario" : "scenarios"}
+                  {prefferedScenarios.length < 2 && " (select at least 2)"}
                 </p>
               </div>
             </div>

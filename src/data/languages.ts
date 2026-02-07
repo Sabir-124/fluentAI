@@ -273,3 +273,7 @@ export const comingSoonLanguages = [
   { name: "Finnish", nativeName: "Suomi", flag: Finland, eta: "Q3 2026" },
   { name: "Czech", nativeName: "Čeština", flag: Czech, eta: "Q4 2026" },
 ];
+
+export const combinedLanguages = [...popularLanguages, ...allLanguages].sort(
+  (a, b) => a.name.localeCompare(b.name),
+);

@@ -46,6 +46,7 @@ const App = () => {
     else if (pathname === "/conversation") setCurrentLink("Conversation");
     else if (pathname === "/progress") setCurrentLink("Progress");
     else if (pathname === "/help") setCurrentLink("Help");
+    else if (pathname === "/profile") setCurrentLink("Profile");
   }, [pathname, setCurrentLink]);
 
   return (

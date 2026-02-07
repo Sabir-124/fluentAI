@@ -1,5 +1,44 @@
-import { user } from "@/pages/DashBoard";
+import { user } from "@/pages/Dashboard";
 import { Clock, Flame, MessageSquare, TrendingUp } from "lucide-react";
+
+const stats = [
+  {
+    icon: Flame,
+    gradient: {
+      from: "#F59E0B",
+      to: "#EF4444",
+    },
+    stat: "7 Days",
+    description: "Days practiced consecutively",
+  },
+  {
+    icon: Clock,
+    gradient: {
+      from: "#00D9C0",
+      to: "#6C47FF",
+    },
+    stat: "12h 34m",
+    description: "All-time practice duration",
+  },
+  {
+    icon: TrendingUp,
+    gradient: {
+      from: "#10B981",
+      to: "#00D9C0",
+    },
+    stat: "75%",
+    description: "Overall language proficiency",
+  },
+  {
+    icon: MessageSquare,
+    gradient: {
+      from: "#6C47FF",
+      to: "#FF6B9D",
+    },
+    stat: "5 Sessions",
+    description: "Practice sessions completed",
+  },
+];
 
 const WelcomeSection = () => {
   return (
@@ -17,57 +56,25 @@ const WelcomeSection = () => {
 
         {/* Quick Stats Row */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {/* Current Streak */}
-          <div className="bg-[#1A1F2E] border border-white/10 rounded-xl p-6 hover:border-[#6C47FF] transition-all">
-            <div className="inline-flex p-3 rounded-xl bg-linear-to-r from-[#F59E0B] to-[#EF4444] mb-4">
-              <Flame size={24} />
-            </div>
-            <div className="text-3xl font-bold mb-1">
-              🔥 {user.stats.currentStreak} Days
-            </div>
-            <div className="text-sm text-[#E8ECEF]/60">
-              Days practiced consecutively
-            </div>
-          </div>
-
-          {/* Total Practice Time */}
-          <div className="bg-[#1A1F2E] border border-white/10 rounded-xl p-6 hover:border-[#6C47FF] transition-all">
-            <div className="inline-flex p-3 rounded-xl bg-linear-to-r from-[#00D9C0] to-[#6C47FF] mb-4">
-              <Clock size={24} />
-            </div>
-            <div className="text-3xl font-bold mb-1">
-              ⏱️ {user.stats.totalPracticeTime}
-            </div>
-            <div className="text-sm text-[#E8ECEF]/60">
-              All-time practice duration
-            </div>
-          </div>
-
-          {/* Fluency Score */}
-          <div className="bg-[#1A1F2E] border border-white/10 rounded-xl p-6 hover:border-[#6C47FF] transition-all">
-            <div className="inline-flex p-3 rounded-xl bg-linear-to-r from-[#10B981] to-[#00D9C0] mb-4">
-              <TrendingUp size={24} />
-            </div>
-            <div className="text-3xl font-bold mb-1">
-              📊 {user.stats.fluencyScore}%
-            </div>
-            <div className="text-sm text-[#E8ECEF]/60">
-              Overall language proficiency
-            </div>
-          </div>
-
-          {/* Sessions This Week */}
-          <div className="bg-[#1A1F2E] border border-white/10 rounded-xl p-6 hover:border-[#6C47FF] transition-all">
-            <div className="inline-flex p-3 rounded-xl bg-linear-to-r from-[#6C47FF] to-[#FF6B9D] mb-4">
-              <MessageSquare size={24} />
-            </div>
-            <div className="text-3xl font-bold mb-1">
-              💬 {user.stats.sessionsThisWeek} Sessions
-            </div>
-            <div className="text-sm text-[#E8ECEF]/60">
-              Practice sessions completed
-            </div>
-          </div>
+          {stats.map((stat) => {
+            const Icon = stat.icon;
+            return (
+              <div
+                key={stat.stat}
+                className="bg-[#1A1F2E] border border-white/10 rounded-xl p-6 hover:border-[#6C47FF] transition-all"
+              >
+                <div
+                  className={`inline-flex p-3 rounded-xl bg-linear-to-r from-[${stat.gradient.from}] to-[${stat.gradient.to}] mb-4`}
+                >
+                  <Icon size={24} />
+                </div>
+                <div className="text-3xl font-bold mb-1">{stat.stat}</div>
+                <div className="text-sm text-[#E8ECEF]/60">
+                  {stat.description}
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>
