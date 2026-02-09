@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import { Spotlight } from "../ui/spotlight";
+import { Link } from "react-router-dom";
 
 const HeroSection = () => {
   return (
@@ -25,9 +26,12 @@ const HeroSection = () => {
 
         {/* CTA buttons */}
         <div className="flex justify-center gap-2 sm:gap-5 text-sm sm:text-[18px] z-10">
-          <button className="bg-linear-to-br from-[#6C47FF] to-[#FF6B9D] px-9 sm:px-12 py-2 sm:py-4 font-semibold rounded-xl shadow-[0_8px_24px_rgba(108,71,255,0.4)] hover:scale-105 hover:shadow-[0_12px_32px_rgba(108,71,255,0.6)] transition-all duration-300 cursor-pointer">
+          <Link
+            to={"/dashboard"}
+            className="bg-linear-to-br from-[#6C47FF] to-[#FF6B9D] px-9 sm:px-12 py-2 sm:py-4 font-semibold rounded-xl shadow-[0_8px_24px_rgba(108,71,255,0.4)] hover:scale-105 hover:shadow-[0_12px_32px_rgba(108,71,255,0.6)] transition-all duration-300 cursor-pointer"
+          >
             Start Learning
-          </button>
+          </Link>
 
           <button className="bg-transparent px-9 sm:px-12 py-2 sm:py-4 font-medium rounded-xl border-2 border-white/70 hover:border-[#6C47FF] transition duration-300 text-white hover:text-[#6C47FF] cursor-pointer">
             Watch Demo

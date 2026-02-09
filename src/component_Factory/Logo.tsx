@@ -5,12 +5,12 @@ const Logo = () => {
   return (
     <Link to={"/"} className="flex items-center gap-2 cursor-pointer group">
       <img
-        className="w-15 h-auto transition-all duration-300
+        className="w-13 sm:w-15 h-auto transition-all duration-300
       group-hover:drop-shadow-[0_0_15px_#6C47FF]"
         src={MainLogo}
         alt=""
       />
-      <h1 className="bg-linear-to-br from-[#6C47FF] to-[#FF6B9D] bg-clip-text text-transparent text-[28px] font-extrabold">
+      <h1 className="bg-linear-to-br from-[#6C47FF] to-[#FF6B9D] bg-clip-text text-transparent text-[24px] sm:text-[28px] font-extrabold">
         FluentAI
       </h1>
     </Link>

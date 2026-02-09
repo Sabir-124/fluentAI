@@ -1,7 +1,10 @@
 import { useRecording } from "@/store/useRecording";
 
 const AudioVisualizer = () => {
-  const { isRecording } = useRecording();
+  const { isMicActive, isSessionActive, isPaused } = useRecording();
+
+  const isAnimating = isSessionActive && isMicActive && !isPaused;
+
   return (
     <div className="h-20 bg-[#1A1F2E]/50 border-t border-white/10 flex items-center justify-center px-6">
       <div className="flex items-center gap-1 h-12">
@@ -10,8 +13,8 @@ const AudioVisualizer = () => {
             key={i}
             className="w-1 bg-linear-to-t from-[#00D9C0] to-[#6C47FF] rounded-full transition-all duration-100"
             style={{
-              height: isRecording ? `${Math.random() * 100}%` : "10%",
-              opacity: isRecording ? 1 : 0.3,
+              height: isAnimating ? `${20 + Math.random() * 80}%` : "10%",
+              opacity: isAnimating ? 1 : 0.3,
             }}
           />
         ))}

@@ -88,53 +88,12 @@ export const goals = [
   },
 ];
 
-export const scenarios = [
-  {
-    id: "restaurant",
-    label: "Restaurant",
-    icon: Utensils,
-    iconColor: "#FED7AA", // light orange
-    iconColorDark: "#C2410C", // deep orange
-    description: "Ordering food & drinks",
-  },
-  {
-    id: "travel",
-    label: "Travel",
-    icon: Plane,
-    iconColor: "#BAE6FD", // light sky
-    iconColorDark: "#0369A1", // deep sky blue
-    description: "Airports & hotels",
-  },
-  {
-    id: "shopping",
-    label: "Shopping",
-    icon: ShoppingBag,
-    iconColor: "#FBCFE8", // light pink
-    iconColorDark: "#BE185D", // deep pink
-    description: "Buying items",
-  },
-  {
-    id: "business",
-    label: "Business",
-    icon: Briefcase,
-    iconColor: "#E0E7FF", // light indigo
-    iconColorDark: "#3730A3", // deep indigo
-    description: "Meetings & emails",
-  },
-  {
-    id: "medical",
-    label: "Medical",
-    icon: Hospital,
-    iconColor: "#FECACA", // light red
-    iconColorDark: "#B91C1C", // deep red
-    description: "Doctor visits",
-  },
-  {
-    id: "social",
-    label: "Social",
-    icon: Users,
-    iconColor: "#BBF7D0", // light green
-    iconColorDark: "#166534", // deep green
-    description: "Making friends",
-  },
-];
+const data = async () => {
+  const rawData = await fetch("http://localhost:5002/api/scenarios");
+  const result = await rawData.json();
+  return result.scenarios;
+};
+ export const scenarios = await data();
+
+
+

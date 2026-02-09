@@ -1,3 +1,4 @@
+// Dashboard.tsx
 import WelcomeSection from "@/components/Dashboard/WelcomeSection";
 import QuickActions from "@/components/Dashboard/QuickActions";
 import RecentSessions from "@/components/Dashboard/RecentSessions";

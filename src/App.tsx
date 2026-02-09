@@ -1,4 +1,6 @@
+// App.tsx
 import { Route, Routes, useLocation } from "react-router-dom";
+import { useAuth } from "@clerk/clerk-react";
 import "./App.css";
 import Header from "./Header";
 import Home from "./pages/Home";
@@ -9,17 +11,21 @@ import { useEffect } from "react";
 import Languages from "./pages/Languages";
 import About from "./pages/About";
 import LearningGuidesPage from "./components/Guide/GuidePage";
-import AuthPage from "./pages/SignUp";
+import AuthPage from "./pages/SignUp"; // Your existing auth page or use the new one
 import OnboardingPage from "./pages/OnBoarding";
 import Conversation from "./pages/Conversation";
 import Profile from "./pages/Profile";
 import ProgressOverview from "./pages/ProgressOverview";
 import Dashboard from "./pages/Dashboard";
-import UserHeader from "./components/Dashboard/Header";
+import UserHeader from "./components/Dashboard/Header";// Import protected route
+import SSOCallback from "./components/SSOCallback";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { Toaster } from "sonner";
 
 const App = () => {
   const { pathname } = useLocation();
   const { setCurrentLink } = useLinkStore();
+  const { isSignedIn, isLoaded } = useAuth();
 
   useEffect(() => {
     const titles: Record<string, string> = {
@@ -28,9 +34,14 @@ const App = () => {
       "/languages": "Languages | FluentAI",
       "/about": "About Us | FluentAI",
       "/contact": "Contacts | FluentAI",
+      "/guides": "Learning Guides | FluentAI",
+      "/auth": "Sign In | FluentAI",
+      "/sign": "Sign In | FluentAI",
+      "/onboarding": "Get Started | FluentAI",
       "/dashboard": "Dashboard | FluentAI",
       "/conversation": "Conversation | FluentAI",
       "/progress": "Progress | FluentAI",
+      "/profile": "Profile | FluentAI",
       "/help": "Help | FluentAI",
     };
 
@@ -49,24 +60,61 @@ const App = () => {
     else if (pathname === "/profile") setCurrentLink("Profile");
   }, [pathname, setCurrentLink]);
 
+  // Determine which header to show
+  const shouldShowUserHeader =
+    isLoaded &&
+    isSignedIn &&
+    [
+      "/dashboard",
+      "/conversation",
+      "/profile",
+      "/progress",
+      "/onboarding",
+    ].includes(pathname);
+
+  const shouldShowPublicHeader =
+    !isSignedIn ||
+    [
+      "/",
+      "/features",
+      "/languages",
+      "/about",
+      "/guides",
+      "/auth",
+      "/sign",
+    ].includes(pathname);
+
   return (
     <div>
-      <Header />
-      <UserHeader />
+      <Toaster position="top-right" richColors />
+      {/* Show appropriate header based on auth state and route */}
+      {shouldShowPublicHeader && <Header />}
+      {shouldShowUserHeader && <UserHeader />}
+
       <Routes>
+        {/* Public Routes */}
         <Route path="/" element={<Home />} />
         <Route path="/features" element={<Features />} />
         <Route path="/languages" element={<Languages />} />
         <Route path="/about" element={<About />} />
         <Route path="/guides" element={<LearningGuidesPage />} />
-        <Route path="/sign" element={<AuthPage />} />
-        <Route path="/onboarding" element={<OnboardingPage />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/conversation" element={<Conversation />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/progress" element={<ProgressOverview />} />
+        {/* Auth Routes */}
+        <Route path="/auth" element={<AuthPage />} />
+        <Route path="/sign" element={<AuthPage />} />{" "}
+        {/* Keeping your existing route */}
+        <Route path="/sso-callback" element={<SSOCallback />} />
+        {/* Protected Routes - Require Authentication */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/onboarding" element={<OnboardingPage />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/conversation" element={<Conversation />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/progress" element={<ProgressOverview />} />
+        </Route>
       </Routes>
-      <FooterMinimal />
+
+      {/* Only show footer on public pages */}
+      {shouldShowPublicHeader && <FooterMinimal />}
     </div>
   );
 };

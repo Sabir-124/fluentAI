@@ -274,6 +274,20 @@ export const comingSoonLanguages = [
   { name: "Czech", nativeName: "Čeština", flag: Czech, eta: "Q4 2026" },
 ];
 
-export const combinedLanguages = [...popularLanguages, ...allLanguages].sort(
-  (a, b) => a.name.localeCompare(b.name),
+const language = async () => {
+  const data = await fetch(`http://localhost:5002/api/languages`);
+  const result = await data.json();
+  return result.languages;
+};
+
+const languages = await language();
+
+export interface languagesProps {
+  code: string;
+  name: string;
+  nativeName: string;
+}
+
+export const combinedLanguages = languages.sort(
+  (a: languagesProps, b: languagesProps) => a.name.localeCompare(b.name),
 );
