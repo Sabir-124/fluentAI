@@ -2,6 +2,7 @@
 import { useConversation } from "@/store/useConversation";
 import { useEffect, useRef } from "react";
 import { Info, Loader2 } from "lucide-react";
+import FormattedResponse from "@/component_Factory/TextFormatter";
 
 const MessagesDisplay = () => {
   const { messages, isAiTyping, isResponseFetched } = useConversation();
@@ -41,11 +42,11 @@ const MessagesDisplay = () => {
                 }}
               >
                 <p className="text-white leading-relaxed whitespace-pre-wrap">
-                  {msg.content}
+                  <FormattedResponse response={msg.content} />
                 </p>
-                <div className="text-xs text-white/40 mt-2">
+                {/* <div className="text-xs text-white/40 mt-2">
                   {new Date(msg.timestamp).toLocaleTimeString()}
-                </div>
+                </div> */}
               </div>
             </div>
           ))}

@@ -70,7 +70,7 @@ const initialState = {
   mistakePatterns: {},
 };
 
-export const useConversation = create<ConversationState>((set, get) => ({
+export const useConversation = create<ConversationState>((set) => ({
   ...initialState,
 
   setSessionId: (id) => set({ sessionId: id }),
