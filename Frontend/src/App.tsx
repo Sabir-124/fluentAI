@@ -21,7 +21,8 @@ import UserHeader from "./components/Dashboard/Header";// Import protected route
 import SSOCallback from "./components/SSOCallback";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { Toaster } from "sonner";
-
+import SessionDetails from "./pages/SessionDetails";
+import AllSessions from "./pages/AllSessions";
 const App = () => {
   const { pathname } = useLocation();
   const { setCurrentLink } = useLinkStore();
@@ -105,6 +106,8 @@ const App = () => {
         <Route path="/sso-callback" element={<SSOCallback />} />
         {/* Protected Routes - Require Authentication */}
         <Route element={<ProtectedRoute />}>
+          <Route path="/session/:sessionId" element={<SessionDetails />} />
+          <Route path="/sessions" element={<AllSessions />} />
           <Route path="/onboarding" element={<OnboardingPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/conversation" element={<Conversation />} />

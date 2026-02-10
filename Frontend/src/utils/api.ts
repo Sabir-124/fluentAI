@@ -1,8 +1,7 @@
-// API Base URL
+// src/utils/api.ts - Update with better error handling
 export const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || "http://localhost:5002";
 
-// API utility function with authentication
 export async function apiCall(
   endpoint: string,
   options: RequestInit = {},
@@ -16,11 +15,21 @@ export async function apiCall(
 
     // Add authentication token if getToken function is provided
     if (getToken) {
-      const token = await getToken();
-      if (token) {
-        headers.Authorization = `Bearer ${token}`;
+      try {
+        const token = await getToken();
+        if (token) {
+          headers.Authorization = `Bearer ${token}`;
+          console.log("🔑 Token added to request");
+        } else {
+          console.warn("⚠️ No token available");
+        }
+      } catch (tokenError) {
+        console.error("❌ Error getting token:", tokenError);
+        throw new Error("Authentication failed - please sign in again");
       }
     }
+
+    console.log(`📡 API Call: ${endpoint}`);
 
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       ...options,
@@ -30,12 +39,31 @@ export async function apiCall(
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data.message || "API request failed");
+      console.error(`❌ API Error ${response.status}:`, data);
+
+      // Handle specific error codes
+      if (response.status === 401) {
+        throw new Error("Please sign in to continue");
+      }
+      if (response.status === 403) {
+        throw new Error("Access denied - please check your permissions");
+      }
+      if (response.status === 404) {
+        throw new Error(data.message || "Resource not found");
+      }
+      if (response.status === 429) {
+        throw new Error(
+          data.message || "Too many requests - please try again later",
+        );
+      }
+
+      throw new Error(data.message || data.error || "API request failed");
     }
 
+    console.log("✅ API Success:", endpoint);
     return data;
   } catch (error) {
-    console.error("API call error:", error);
+    console.error("❌ API call error:", error);
     throw error;
   }
 }

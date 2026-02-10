@@ -1,54 +1,60 @@
 // src/components/FeedbackPanel/Context.tsx
 import { useConversation } from "@/store/useConversation";
-import { Globe } from "lucide-react";
+import { Lightbulb } from "lucide-react";
 
 const Context = () => {
-  const { culturalTips, scenario, language } = useConversation();
-
-  const getDefaultTip = () => {
-    const tips: Record<string, Record<string, string>> = {
-      spanish: {
-        restaurant:
-          "In Spanish restaurants, it's common to say 'la cuenta, por favor' when asking for the check.",
-        casual:
-          "Use 'tú' for informal conversations and 'usted' for formal situations.",
-        travel: "In Spain, 'vale' is commonly used to say 'okay' or 'alright'.",
-      },
-      french: {
-        restaurant:
-          "In France, say 'l'addition, s'il vous plaît' to ask for the bill.",
-        casual:
-          "Use 'tu' for friends and 'vous' for formal or professional settings.",
-      },
-      // Add more languages and scenarios...
-    };
-
-    return tips[language]?.[scenario] || "Practice makes perfect! Keep going!";
-  };
+  const { culturalTips, vocabularyLearned } = useConversation();
 
   return (
-    <div className="space-y-4">
-      {culturalTips.length > 0 ? (
-        culturalTips.map((tip, idx) => (
-          <div key={idx} className="bg-[#2D3748] rounded-xl p-4">
-            <h3 className="font-semibold mb-2 flex items-center gap-2">
-              <Globe size={18} className="text-[#00D9C0]" />
-              Cultural Tip
-            </h3>
-            <p className="text-sm text-[#E8ECEF]/70 leading-relaxed">{tip}</p>
-          </div>
-        ))
-      ) : (
-        <div className="bg-[#2D3748] rounded-xl p-4">
-          <h3 className="font-semibold mb-2 flex items-center gap-2">
-            <Globe size={18} className="text-[#00D9C0]" />
-            Cultural Tip
-          </h3>
-          <p className="text-sm text-[#E8ECEF]/70 leading-relaxed">
-            {getDefaultTip()}
+    <div className="space-y-6">
+      {/* Cultural Tips */}
+      <div>
+        <h3 className="text-sm font-medium text-[#E8ECEF]/70 mb-3 flex items-center gap-2">
+          <Lightbulb size={16} className="text-[#F59E0B]" />
+          Cultural Insights
+        </h3>
+
+        {culturalTips.length === 0 ? (
+          <p className="text-xs text-[#E8ECEF]/40">
+            Cultural tips will appear here during your conversation
           </p>
-        </div>
-      )}
+        ) : (
+          <div className="space-y-2">
+            {culturalTips.map((tip, idx) => (
+              <div
+                key={idx}
+                className="bg-[#2D3748] rounded-lg p-3 border border-[#F59E0B]/20"
+              >
+                <p className="text-sm text-[#E8ECEF]/80">{tip}</p>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Vocabulary */}
+      <div>
+        <h3 className="text-sm font-medium text-[#E8ECEF]/70 mb-3">
+          Vocabulary Learned
+        </h3>
+
+        {vocabularyLearned.length === 0 ? (
+          <p className="text-xs text-[#E8ECEF]/40">
+            New words you learn will be saved here
+          </p>
+        ) : (
+          <div className="flex flex-wrap gap-2">
+            {vocabularyLearned.map((word, idx) => (
+              <span
+                key={idx}
+                className="px-3 py-1 bg-gradient-to-r from-[#6C47FF]/20 to-[#00D9C0]/20 rounded-full text-xs text-[#00D9C0] border border-[#00D9C0]/30"
+              >
+                {word}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

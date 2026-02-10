@@ -1,4 +1,4 @@
-// src/pages/Conversation.tsx
+// src/pages/Conversation.tsx - FIXED
 import ControlPanel from "@/components/ControlPanel/ControlPanel";
 import ConversationDisplay from "@/components/Conversation/ConversationDisplay";
 import FeedbackPanel from "@/components/FeedbackPanel/FeedbackPanel";
@@ -6,16 +6,19 @@ import { useWebSocket } from "@/services/websocket";
 import { useConversation } from "@/store/useConversation";
 import { useRecording } from "@/store/useRecording";
 import { useAuth } from "@clerk/clerk-react";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import {toast}  from "sonner";
+import { toast } from "sonner";
 
 export default function Conversation() {
   const { isSignedIn, isLoaded } = useAuth();
   const navigate = useNavigate();
   const ws = useWebSocket();
-  const { reset: resetConversation } = useConversation();
-  const { stopSession } = useRecording();
+  const { reset: resetConversation, isActive } = useConversation();
+  const { stopSession, isSessionActive } = useRecording();
+
+  // Track if we're already cleaning up to prevent duplicate calls
+  const isCleaningUp = useRef(false);
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -32,14 +35,14 @@ export default function Conversation() {
     const connectWS = async () => {
       try {
         if (!ws.isConnected()) {
-          toast.loading("Connecting...", { id: "ws-connect" });
+          const toastId = toast.loading("Connecting...");
           await ws.connect();
           connected = true;
-          toast.success("Connected!", { id: "ws-connect" });
+          toast.success("Connected!", { id: toastId });
         }
       } catch (error: any) {
         console.error("WebSocket connection failed:", error);
-        toast.error(error.message || "Failed to connect", { id: "ws-connect" });
+        toast.error(error.message || "Failed to connect");
       }
     };
 
@@ -47,24 +50,31 @@ export default function Conversation() {
 
     // Cleanup on unmount
     return () => {
+      if (isCleaningUp.current) return;
+      isCleaningUp.current = true;
+
+      // Only end session if it's actually active
+      if (connected && ws.isConnected() && isSessionActive) {
+        console.log("🧹 Cleaning up active session on unmount");
+        ws.endSession();
+      }
+
       if (connected && ws.isConnected()) {
-        // End active session if any
-        if (useRecording.getState().isSessionActive) {
-          ws.endSession();
-        }
         ws.disconnect();
       }
 
       // Reset stores
       resetConversation();
       stopSession();
+
+      isCleaningUp.current = false;
     };
-  }, []);
+  }, []); // Only run on mount/unmount
 
   // Handle beforeunload (user closing tab)
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      if (useRecording.getState().isSessionActive) {
+      if (isSessionActive) {
         e.preventDefault();
         e.returnValue = "";
         return "You have an active session. Are you sure you want to leave?";
@@ -73,7 +83,7 @@ export default function Conversation() {
 
     window.addEventListener("beforeunload", handleBeforeUnload);
     return () => window.removeEventListener("beforeunload", handleBeforeUnload);
-  }, []);
+  }, [isSessionActive]);
 
   if (!isLoaded || !isSignedIn) {
     return (

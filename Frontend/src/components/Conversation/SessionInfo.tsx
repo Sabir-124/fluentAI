@@ -1,39 +1,30 @@
 // src/components/Conversation/SessionInfo.tsx
 import { useConversation } from "@/store/useConversation";
-import { useRecording } from "@/store/useRecording";
-import { Globe, Target, BookOpen } from "lucide-react";
+import { MessageSquare } from "lucide-react";
 
 const SessionInfo = () => {
-  const { language, difficulty, scenario, isActive } = useConversation();
-  const { isSessionActive } = useRecording();
+  const { language, difficulty, scenario, isActive, messageCount } =
+    useConversation();
 
-  if (!isSessionActive || !isActive) return null;
+  if (!isActive) {
+    return null;
+  }
 
   return (
-    <div className="bg-[#1A1F2E] border-b border-white/10 px-6 py-3">
-      <div className="flex items-center gap-6 text-sm">
-        <div className="flex items-center gap-2">
-          <Globe size={16} className="text-[#00D9C0]" />
-          <span className="text-[#E8ECEF]/60">Language:</span>
-          <span className="font-semibold text-white capitalize">
-            {language}
-          </span>
+    <div className="p-4 border-b border-white/10 bg-[#1A1F2E]">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-2 h-2 bg-[#00D9C0] rounded-full animate-pulse"></div>
+          <div>
+            <p className="text-sm font-medium text-white capitalize">
+              {language} • {difficulty} • {scenario}
+            </p>
+          </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <Target size={16} className="text-[#6C47FF]" />
-          <span className="text-[#E8ECEF]/60">Level:</span>
-          <span className="font-semibold text-white capitalize">
-            {difficulty}
-          </span>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <BookOpen size={16} className="text-[#FF6B9D]" />
-          <span className="text-[#E8ECEF]/60">Scenario:</span>
-          <span className="font-semibold text-white capitalize">
-            {scenario}
-          </span>
+        <div className="flex items-center gap-2 text-[#E8ECEF]/60">
+          <MessageSquare size={16} />
+          <span className="text-sm">{messageCount} messages</span>
         </div>
       </div>
     </div>
